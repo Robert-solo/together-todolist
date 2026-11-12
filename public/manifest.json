@@ -1,0 +1,29 @@
+{
+  "name": "Together Todolist",
+  "short_name": "Together",
+  "description": "一起把时间用在值得的地方",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06090a",
+  "theme_color": "#0f8a7a",
+  "orientation": "portrait",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/together-icon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/together-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

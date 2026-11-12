@@ -18,7 +18,7 @@ Together Todolist 是一款轻量的时间日志 Web 应用，帮助你记录每
 |:---:|:---:|
 | ![月视图](layout/web03.png) | ![统计](layout/web04.png) |
 
-### 手机端
+### 手机端（Android APK）
 
 <p align="center">
   <img src="layout/Layout01.jpg" width="19%" alt="手机日视图" />
@@ -27,6 +27,37 @@ Together Todolist 是一款轻量的时间日志 Web 应用，帮助你记录每
   <img src="layout/Layout04.jpg" width="19%" alt="手机统计" />
   <img src="layout/Layout05.jpg" width="19%" alt="APP 预览" />
 </p>
+
+### iPhone / iOS（添加到主屏幕）
+
+<p align="center">
+  <img src="layout/iPhone01.jpg" width="19%" alt="Safari 分享添加到主屏幕" />
+  <img src="layout/iPhone02.png" width="19%" alt="iOS 周视图" />
+  <img src="layout/iPhone03.png" width="19%" alt="iOS 日视图" />
+  <img src="layout/iPhone04.png" width="19%" alt="iOS 月视图详情弹窗" />
+  <img src="layout/iPhone05.png" width="19%" alt="iOS 统计页" />
+</p>
+
+---
+
+## iOS 使用方式
+
+Together Todolist 支持 iOS 添加到主屏幕，体验接近原生 App，无需 Apple 开发者账号，无需 App Store，永不失效。
+
+**安装步骤**
+
+1. 用 **Safari** 打开 [https://todo.whunlp.asia](https://todo.whunlp.asia)
+2. 点击底部工具栏中间的 **分享按钮**（方框加箭头图标）
+3. 在弹出菜单中找到 **「添加到主屏幕」**，点击
+4. 确认名称为 **Together Todolist**，点击右上角 **「添加」**
+5. 主屏幕上出现图标，点击即可全屏启动，与原生 App 体验一致
+
+**说明**
+
+- 必须用 **Safari** 操作，Chrome/微信内置浏览器不支持添加主屏幕
+- 需要联网访问域名，数据存储在服务端，换设备登录即可同步
+- 最低支持 iOS 16.4（iPhone 8 及以上）
+- 添加后图标样式与应用内图标一致，启动时无地址栏
 
 ---
 
