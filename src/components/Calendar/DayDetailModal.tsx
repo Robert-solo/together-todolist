@@ -4,6 +4,7 @@ import { zhCN } from 'date-fns/locale'
 import { useEntryStore } from '../../store/entryStore'
 import { useUIStore } from '../../store/uiStore'
 import { formatDuration } from '../../utils/parseInput'
+import { fmtClock } from '../../utils/time'
 import { EntryModal } from './EntryModal'
 import s from './DayDetailModal.module.css'
 
@@ -65,8 +66,8 @@ export function DayDetailModal({ date, onClose }: Props) {
                       onClick={() => setEditingEntry(e.id)}
                     >
                       <div className={s.itemTime}>
-                        {e.startTime.slice(11, 16)}
-                        {e.endTime && ` – ${e.endTime.slice(11, 16)}`}
+                        {fmtClock(e.startTime)}
+                        {e.endTime && ` – ${fmtClock(e.endTime)}`}
                       </div>
                       <div className={s.itemContent}>
                         <div className={s.itemTitle}>{e.title}</div>

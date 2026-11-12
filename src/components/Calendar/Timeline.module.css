@@ -1,0 +1,98 @@
+/* 时间轴手势共用样式：长按反馈、拖动幽灵块、调整时长把手 */
+
+/* 事件被按住、等待长按生效 */
+.pressing {
+  transform: scale(0.97);
+  filter: brightness(1.08);
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+/* 拖动/调整时，原位置的事件变淡，幽灵块跟手 */
+.lifted { opacity: 0.32; filter: saturate(0.6); }
+
+/* 空白处长按的圆形进度反馈（时长 = 长按判定时长） */
+.ripple {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  margin: -34px 0 0 -34px;
+  border-radius: 50%;
+  border: 2px solid var(--c-tint);
+  background: var(--c-accent-bg);
+  pointer-events: none;
+  z-index: 7;
+  animation-name: ripple-fill;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes ripple-fill {
+  from { transform: scale(0.15); opacity: 1; }
+  to   { transform: scale(1);    opacity: 0.55; }
+}
+
+/* 拖动中的幽灵块 */
+.ghost {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  z-index: 8;
+  border-radius: var(--radius-sm);
+  padding: 3px 7px;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--c-on-color);
+  background: color-mix(in srgb, var(--ghost) 88%, transparent);
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.30), inset 0 0 0 2px color-mix(in srgb, var(--c-on-color) 85%, transparent);
+  animation: ghost-pop 150ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.ghostCreate {
+  background: color-mix(in srgb, var(--c-accent-1) 90%, transparent);
+}
+.ghostInvalid {
+  background: color-mix(in srgb, var(--c-danger) 92%, transparent);
+  animation: ghost-shake 280ms ease;
+}
+.ghostTitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ghostTime {
+  font-size: 0.62rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.92;
+}
+@keyframes ghost-pop {
+  from { transform: scale(0.94); opacity: 0.4; }
+}
+@keyframes ghost-shake {
+  20% { transform: translateX(-4px); }
+  45% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
+}
+
+/* 事件上下边缘的调整把手：鼠标悬停时出现，调整中常显 */
+.hTop::before,
+.hBottom::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 22px;
+  height: 3px;
+  margin-left: -11px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--c-on-color) 85%, transparent);
+  opacity: 0;
+  transition: opacity 120ms;
+  pointer-events: none;
+}
+.hTop::before { top: 3px; }
+.hBottom::after { bottom: 3px; }
+@media (hover: hover) {
+  .hTop:hover::before,
+  .hBottom:hover::after { opacity: 1; }
+}

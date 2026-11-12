@@ -9,32 +9,52 @@
   gap: 20px;
 }
 
-/* Range tabs */
+/* Range tabs —— 分段控件（UISegmentedControl 风格），选中块滑动切换 */
 .rangeTabs {
-  display: flex;
-  gap: 4px;
-  background: var(--c-bg);
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-md);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n, 4), 1fr);
+  width: 100%;
+  max-width: 440px;
   padding: 3px;
-  width: fit-content;
+  border-radius: var(--radius-md);
+  background: var(--c-fill);
+  flex-shrink: 0;
+}
+
+.rangeThumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / var(--n, 4));
+  border-radius: calc(var(--radius-md) - 3px);
+  background: var(--c-raised);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(calc(var(--idx, 0) * 100%));
+  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
 }
 
 .rangeTab {
-  padding: 5px 16px;
-  border-radius: 7px;
+  position: relative;
+  z-index: 1;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: calc(var(--radius-md) - 3px);
   font-size: 0.82rem;
   color: var(--c-muted);
-  transition: background 120ms, color 120ms;
+  text-align: center;
+  transition: color 160ms;
 }
 
-.rangeTab:hover { color: var(--c-body); }
+@media (hover: hover) {
+  .rangeTab:hover { color: var(--c-body); }
+}
 
 .rangeTab.active {
-  background: var(--c-raised);
-  color: var(--c-body);
-  font-weight: 500;
-  box-shadow: var(--shadow-sm);
+  color: var(--c-heading);
+  font-weight: 600;
 }
 
 /* Filter banner */
@@ -43,7 +63,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 0.8rem;
-  color: var(--c-accent-1);
+  color: var(--c-tint);
   background: var(--c-accent-bg);
   border-radius: var(--radius-sm);
   padding: 6px 14px;
@@ -51,12 +71,15 @@
 
 .filterBanner button {
   font-size: 0.75rem;
-  color: var(--c-accent-1);
+  color: var(--c-tint);
   opacity: 0.75;
   transition: opacity 100ms;
 }
 
-.filterBanner button:hover { opacity: 1; }
+@media (hover: hover) {
+  .filterBanner button:hover { opacity: 1;
+  }
+}
 
 /* Stats grid */
 .statsGrid {
@@ -256,7 +279,10 @@
   transition: background 100ms;
 }
 
-.entryRow:hover { background: var(--c-bg); }
+@media (hover: hover) {
+  .entryRow:hover { background: var(--c-bg);
+  }
+}
 
 .entryTime {
   font-size: 0.75rem;
@@ -302,11 +328,16 @@
 
 .entryDel svg { width: 11px; height: 11px; }
 
-.entryRow:hover .entryDel { opacity: 0.85; }
-.entryDel:hover {
+@media (hover: hover) {
+  .entryRow:hover .entryDel { opacity: 0.85;
+  }
+}
+@media (hover: hover) {
+  .entryDel:hover {
   opacity: 1;
-  background: oklch(94% 0.05 25);
-  color: oklch(52% 0.20 25);
+  background: var(--c-danger-bg);
+  color: var(--c-danger);
+  }
 }
 
 .confirmGroup {
@@ -326,18 +357,24 @@
 }
 
 .confirmYes {
-  background: oklch(56% 0.20 25);
-  color: white;
+  background: var(--c-danger);
+  color: var(--c-on-color);
   font-weight: 500;
 }
-.confirmYes:hover { background: oklch(50% 0.21 25); }
+@media (hover: hover) {
+  .confirmYes:hover { background: var(--c-danger);
+  }
+}
 
 .confirmNo {
   background: var(--c-bg);
   color: var(--c-muted);
   border: 1px solid var(--c-border);
 }
-.confirmNo:hover { color: var(--c-body); }
+@media (hover: hover) {
+  .confirmNo:hover { color: var(--c-body);
+  }
+}
 
 .empty {
   text-align: center;
@@ -347,6 +384,7 @@
 }
 
 @media (max-width: 768px) {
+  .rangeTabs { max-width: none; }
   .container { padding: 12px; padding-bottom: 148px; gap: 14px; }
   .statsGrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .chartRow { flex-direction: column; align-items: center; gap: 16px; }

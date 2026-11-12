@@ -19,7 +19,7 @@
 
 .wrap:focus-within {
   border-color: var(--c-accent-2);
-  box-shadow: 0 0 0 3px oklch(52% 0.10 178 / 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent-1) 12%, transparent);
   background: var(--c-raised);
 }
 
@@ -59,9 +59,11 @@
   padding: 2px;
 }
 
-.clear:hover {
+@media (hover: hover) {
+  .clear:hover {
   background: var(--c-border);
   color: var(--c-body);
+  }
 }
 
 .clear svg { width: 10px; height: 10px; }
@@ -69,7 +71,7 @@
 .btn {
   flex-shrink: 0;
   background: var(--c-accent-1);
-  color: white;
+  color: var(--c-on-color);
   border-radius: 9px;
   padding: 0 16px;
   height: 36px;
@@ -78,12 +80,14 @@
   transition: background 120ms, transform 80ms, box-shadow 120ms;
   letter-spacing: 0.03em;
   white-space: nowrap;
-  box-shadow: 0 1px 4px oklch(44% 0.10 178 / 0.3);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--c-accent-1) 30%, transparent);
 }
 
-.btn:hover {
+@media (hover: hover) {
+  .btn:hover {
   background: var(--c-accent-2);
-  box-shadow: 0 2px 8px oklch(44% 0.10 178 / 0.35);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--c-accent-1) 35%, transparent);
+  }
 }
 
 .btn:active { transform: scale(0.96); }
@@ -95,9 +99,9 @@
   right: 0;
   z-index: 20;
   font-size: 0.74rem;
-  color: oklch(48% 0.19 25);
-  background: oklch(96% 0.03 25);
-  border: 1px solid oklch(85% 0.07 25);
+  color: var(--c-danger);
+  background: var(--c-danger-bg);
+  border: 1px solid var(--c-danger-border);
   border-radius: var(--radius-sm);
   padding: 5px 10px;
   box-shadow: var(--shadow-sm);

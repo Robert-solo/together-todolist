@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: oklch(0% 0 0 / 0.3);
+  background: rgb(0 0 0 / 0.3);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -19,7 +19,7 @@
   background: var(--c-raised);
   border-radius: var(--radius-lg);
   width: 420px;
-  max-width: calc(100vw - 32px);
+  max-width: calc(calc(100vw / var(--ui-zoom)) - 32px);
   box-shadow: var(--shadow-md);
   animation: scaleIn 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
@@ -51,7 +51,10 @@
   border-radius: 4px;
   transition: background 100ms;
 }
-.close:hover { background: var(--c-bg); }
+@media (hover: hover) {
+  .close:hover { background: var(--c-bg);
+  }
+}
 
 .addRow {
   padding: 14px 20px;
@@ -76,7 +79,10 @@
   flex-shrink: 0;
 }
 
-.colorDot:hover { transform: scale(1.15); }
+@media (hover: hover) {
+  .colorDot:hover { transform: scale(1.15);
+  }
+}
 
 .colorDot.selected {
   box-shadow: 0 0 0 2px var(--c-raised), 0 0 0 4px currentColor;
@@ -103,7 +109,7 @@
 
 .addBtn {
   background: var(--c-accent-1);
-  color: white;
+  color: var(--c-on-color);
   border-radius: var(--radius-sm);
   padding: 0 14px;
   font-size: 0.82rem;
@@ -111,7 +117,10 @@
   transition: background 120ms;
   white-space: nowrap;
 }
-.addBtn:hover { background: var(--c-accent-2); }
+@media (hover: hover) {
+  .addBtn:hover { background: var(--c-accent-2);
+  }
+}
 
 .list {
   max-height: 320px;
@@ -124,9 +133,13 @@
   align-items: center;
   gap: 10px;
   padding: 8px 20px;
+  border-radius: var(--radius-sm);
   transition: background 100ms;
 }
-.item:hover { background: var(--c-bg); }
+@media (hover: hover) {
+  .item:hover { background: var(--c-bg);
+  }
+}
 
 .dot {
   width: 10px;
@@ -143,7 +156,10 @@
   border-bottom: 1px dashed transparent;
   transition: border-color 100ms;
 }
-.name:hover { border-color: var(--c-muted); }
+@media (hover: hover) {
+  .name:hover { border-color: var(--c-muted);
+  }
+}
 
 .inlineInput {
   flex: 1;
@@ -163,7 +179,9 @@
   border-radius: 3px;
   transition: color 100ms, background 100ms;
 }
-.del:hover {
-  color: #c76b6b;
-  background: oklch(62% 0.12 15 / 0.08);
+@media (hover: hover) {
+  .del:hover {
+  color: var(--c-danger);
+  background: var(--c-danger-bg);
+  }
 }

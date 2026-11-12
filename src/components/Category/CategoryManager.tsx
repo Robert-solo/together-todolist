@@ -5,9 +5,9 @@ import { nanoid } from '../../utils/nanoid'
 import s from './CategoryManager.module.css'
 
 const PRESET_COLORS = [
-  '#6b7db3','#7b7ec8','#9b7ec8','#5aab7a',
-  '#d4a84b','#c76b6b','#9b6bc8','#9aab5a',
-  '#4aabb3','#c8936b','#6bc8b3','#c86b93',
+  '#0A72E8','#5856D6','#A03DD6','#248A3D',
+  '#C25E00','#D70015','#D0316F','#00809A',
+  '#2E88B8','#0C817B','#8E6E4B','#636366',
 ]
 
 export function CategoryManager() {

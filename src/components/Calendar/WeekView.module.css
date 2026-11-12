@@ -6,7 +6,26 @@
   background: var(--c-bg);
 }
 
-/* ── Stats bar ── */
+/* ── Stats bar（折叠：grid 行高 1fr → 0fr，带动画） ── */
+.statsWrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  flex-shrink: 0;
+  transition: grid-template-rows 260ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 200ms ease;
+}
+.statsCollapsed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+.statsInner {
+  overflow: hidden;
+  min-height: 0;
+}
+.statsCollapsed .statsInner {
+  visibility: hidden;
+  transition: visibility 0s 260ms;
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -65,10 +84,18 @@
   color: var(--c-muted);
   transition: background 100ms, color 100ms;
 }
-.navBtn:hover { background: var(--c-bg); color: var(--c-body); }
+@media (hover: hover) {
+  .navBtn:hover { background: var(--c-bg); color: var(--c-body);
+  }
+}
 
 .navTitle {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--c-heading);
@@ -76,14 +103,42 @@
 
 .todayBtn {
   font-size: 0.72rem;
-  color: var(--c-accent-1);
+  color: var(--c-tint);
   padding: 3px 10px;
   border-radius: 99px;
   background: var(--c-accent-bg);
   font-weight: 500;
   transition: background 100ms;
 }
-.todayBtn:hover { background: oklch(90% 0.04 178); }
+@media (hover: hover) {
+  .todayBtn:hover { background: var(--c-accent-bg);
+  }
+}
+
+/* 统计折叠按钮 */
+.statsToggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--c-muted);
+  background: var(--c-fill);
+}
+.statsSummary {
+  font-variant-numeric: tabular-nums;
+  color: var(--c-body);
+  margin-right: 2px;
+}
+.chev {
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: rotate(-90deg);
+}
+.chevOpen { transform: rotate(0deg); }
 
 /* ── Grid ── */
 .gridWrap {
@@ -168,7 +223,7 @@
 }
 
 .todayNum {
-  color: var(--c-accent-1);
+  color: var(--c-tint);
 }
 
 .dayTotal {
@@ -180,7 +235,7 @@
 /* Day body */
 .dayBody {
   position: relative;
-  cursor: crosshair;
+  cursor: default;
 }
 
 .hourLine {
@@ -209,7 +264,7 @@
   background: var(--c-accent-1);
   z-index: 4;
   pointer-events: none;
-  box-shadow: 0 0 0 1px oklch(44% 0.10 178 / 0.2);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-accent-1) 20%, transparent);
 }
 
 .nowDot {
@@ -236,34 +291,37 @@
   min-height: 18px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 3px oklch(0% 0 0 / 0.14);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.14);
+  touch-action: pan-x pan-y;
 }
 
-.block:hover {
+@media (hover: hover) {
+  .block:hover {
   filter: brightness(1.09);
   transform: scaleX(1.015);
   z-index: 5;
-  box-shadow: 0 2px 8px oklch(0% 0 0 / 0.18);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.18);
+  }
 }
 
 .blockTitle {
   font-size: 0.72rem;
   font-weight: 600;
-  color: oklch(99% 0 0);
+  color: var(--c-on-color);
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-shadow: 0 1px 1px oklch(0% 0 0 / 0.18);
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.18);
 }
 
 .blockTime {
   font-size: 0.61rem;
   font-weight: 500;
-  color: oklch(99% 0 0 / 0.82);
+  color: color-mix(in srgb, var(--c-on-color) 82%, transparent);
   margin-top: 1px;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 1px 1px oklch(0% 0 0 / 0.15);
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.15);
 }
 
 .dimmed {
@@ -280,13 +338,13 @@
 .continued {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-top: 2px dashed oklch(100% 0 0 / 0.55);
+  border-top: 2px dashed color-mix(in srgb, var(--c-on-color) 55%, transparent);
 }
 
 .continues {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-bottom: 2px dashed oklch(100% 0 0 / 0.55);
+  border-bottom: 2px dashed color-mix(in srgb, var(--c-on-color) 55%, transparent);
 }
 
 .crossTag {
@@ -296,11 +354,13 @@
   padding: 0 4px;
   margin-right: 3px;
   border-radius: 3px;
-  background: oklch(100% 0 0 / 0.22);
+  background: color-mix(in srgb, var(--c-on-color) 22%, transparent);
   vertical-align: 1px;
 }
 
 @media (max-width: 768px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
   .grid { min-width: 500px; }
+  .statsSummary { display: none; }
+  .yearPart { display: none; }
 }

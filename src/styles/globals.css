@@ -1,83 +1,159 @@
-/* ── Color tokens ── */
+/*
+ * Design tokens — Apple Human Interface Guidelines (Color).
+ * https://developer.apple.com/cn/design/human-interface-guidelines/color
+ *
+ * 规则：组件里只引用这些语义 token，不写死 oklch / #hex / white。
+ * 亮色与深色各一套；文字对比度 ≥ 4.5:1；分类色取自 system colors
+ * （不透明、两种模式通用，白字对比度均 ≥ 4.3:1）。
+ */
 :root {
-  /* Neutral ramp — warm off-white base */
-  --c-bg:        oklch(96.5% 0.005 240);
-  --c-surface:   oklch(98.5% 0.003 240);
-  --c-raised:    oklch(100%  0     0);
-  --c-border:    oklch(89%   0.008 240);
-  --c-border-soft: oklch(93% 0.005 240);
-  --c-muted:     oklch(62%   0.012 240);
-  --c-body:      oklch(28%   0.012 240);
-  --c-heading:   oklch(14%   0.010 240);
+  color-scheme: light dark;
 
-  /* Accent — refined teal */
-  --c-accent-1:  oklch(44%  0.100 178);
-  --c-accent-2:  oklch(52%  0.100 178);
-  --c-accent-3:  oklch(60%  0.095 178);
-  --c-accent-bg: oklch(93%  0.028 178);
-  --c-accent-fg: oklch(99%  0.004 178);
+  /* Backgrounds — systemGroupedBackground / systemBackground */
+  --c-bg:          #F2F2F7;
+  --c-surface:     #FFFFFF;
+  --c-raised:      #FFFFFF;
 
-  /* Category palette — vivid, perceptually balanced */
-  --cat-research: oklch(52% 0.22 255);
-  --cat-study:    oklch(50% 0.24 285);
-  --cat-work:     oklch(54% 0.22 310);
-  --cat-sport:    oklch(56% 0.20 150);
-  --cat-life:     oklch(60% 0.18 68);
-  --cat-social:   oklch(56% 0.22 25);
-  --cat-leisure:  oklch(54% 0.23 335);
-  --cat-other:    oklch(55% 0.18 195);
+  /* Separators & fills */
+  --c-border:      rgba(60, 60, 67, 0.16);
+  --c-border-soft: rgba(60, 60, 67, 0.09);
+  --c-fill:        rgba(120, 120, 128, 0.12);   /* systemFill：悬停 / 按压底色 */
+  --c-scrim:       rgba(0, 0, 0, 0.38);         /* 弹窗遮罩 */
+
+  /* Labels */
+  --c-heading:     #000000;                     /* label */
+  --c-body:        #1D1D1F;
+  --c-muted:       #66666B;                     /* secondaryLabel（高对比） */
+
+  /* Tint — systemMint（高对比版）*/
+  --c-accent-1:    #0C817B;                     /* 实心底色，白字 4.7:1 */
+  --c-accent-2:    #0A6F6A;                     /* 悬停 */
+  --c-accent-3:    #34A8A2;
+  --c-accent-bg:   rgba(12, 129, 123, 0.12);
+  --c-accent-fg:   #FFFFFF;
+  --c-on-color:    #FFFFFF;                     /* 分类色 / 危险色底上的文字 */
+  --c-tint:        #0C817B;                     /* 表面上的强调文字 / 图标 */
+
+  /* Destructive — systemRed */
+  --c-danger:        #D70015;
+  --c-danger-bg:     rgba(215, 0, 21, 0.10);
+  --c-danger-border: rgba(215, 0, 21, 0.30);
+
+  /* Categories — system colors */
+  --cat-research: #0A72E8;   /* Blue   */
+  --cat-study:    #5856D6;   /* Indigo */
+  --cat-work:     #A03DD6;   /* Purple */
+  --cat-sport:    #248A3D;   /* Green  */
+  --cat-life:     #C25E00;   /* Orange */
+  --cat-social:   #D70015;   /* Red    */
+  --cat-leisure:  #D0316F;   /* Pink   */
+  --cat-other:    #00809A;   /* Teal   */
 
   /* Layout */
   --sidebar-w:   168px;
   --topbar-h:    56px;
-  --radius-sm:   6px;
-  --radius-md:   10px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
   --radius-lg:   16px;
   --radius-xl:   22px;
 
+  /* Safe areas：Capacitor SystemBars 注入 --safe-area-inset-*，其余环境走 env() */
+  --safe-top:    var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --safe-right:  var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --safe-left:   var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+
   /* Elevation */
-  --shadow-xs: 0 1px 2px oklch(14% 0.01 240 / 0.06);
-  --shadow-sm: 0 1px 4px oklch(14% 0.01 240 / 0.08), 0 1px 2px oklch(14% 0.01 240 / 0.04);
-  --shadow-md: 0 4px 16px oklch(14% 0.01 240 / 0.10), 0 1px 4px oklch(14% 0.01 240 / 0.06);
-  --shadow-lg: 0 12px 32px oklch(14% 0.01 240 / 0.14), 0 2px 8px oklch(14% 0.01 240 / 0.08);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --c-bg:         oklch(13%  0.008 240);
-    --c-surface:    oklch(17%  0.008 240);
-    --c-raised:     oklch(21%  0.008 240);
-    --c-border:     oklch(28%  0.010 240);
-    --c-border-soft:oklch(24%  0.008 240);
-    --c-muted:      oklch(55%  0.010 240);
-    --c-body:       oklch(84%  0.008 240);
-    --c-heading:    oklch(96%  0.004 240);
-    --c-accent-1:   oklch(58%  0.095 178);
-    --c-accent-2:   oklch(64%  0.090 178);
-    --c-accent-3:   oklch(70%  0.085 178);
-    --c-accent-bg:  oklch(22%  0.040 178);
-    --c-accent-fg:  oklch(99%  0.004 178);
-    --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.25);
-    --shadow-sm: 0 1px 4px oklch(0% 0 0 / 0.30);
-    --shadow-md: 0 4px 16px oklch(0% 0 0 / 0.35);
-    --shadow-lg: 0 12px 32px oklch(0% 0 0 / 0.45);
+    --c-bg:          #000000;
+    --c-surface:     #1C1C1E;
+    --c-raised:      #1C1C1E;
+
+    --c-border:      rgba(84, 84, 88, 0.55);
+    --c-border-soft: rgba(84, 84, 88, 0.30);
+    --c-fill:        rgba(120, 120, 128, 0.28);
+    --c-scrim:       rgba(0, 0, 0, 0.55);
+
+    --c-heading:     #FFFFFF;
+    --c-body:        #E5E5EA;
+    --c-muted:       #A1A1A6;
+
+    --c-accent-1:    #12857F;
+    --c-accent-2:    #1B9A93;
+    --c-accent-3:    #63E6E2;
+    --c-accent-bg:   rgba(99, 230, 226, 0.16);
+    --c-tint:        #63E6E2;
+
+    --c-danger:        #FF453A;
+    --c-danger-bg:     rgba(255, 69, 58, 0.18);
+    --c-danger-border: rgba(255, 69, 58, 0.40);
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.30);
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.40);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.50);
   }
 }
 
 /* ── Reset ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;   /* 去掉安卓/iOS 的方形点按高亮 */
+}
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+
+/* 桌面宽屏默认 150% 缩放（等同浏览器缩放到 150%）；手机/平板保持 100%。
+   视口单位不受 zoom 影响，所以用到 vh/dvh/vw 的地方要除以 --ui-zoom。 */
+:root { --ui-zoom: 1; }
+@media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+  :root { --ui-zoom: 1.5; }
+  html { zoom: var(--ui-zoom); }
+}
 body {
-  font-family: 'Inter', 'Noto Sans SC', -apple-system, system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC',
+    'Helvetica Neue', 'Inter', 'Noto Sans SC', system-ui, sans-serif;
   background: var(--c-bg);
   color: var(--c-body);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  /* 界面文字不可选中、长按不弹系统菜单；输入框与 .selectable 例外 */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
-button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
-input, textarea { font: inherit; }
+input, textarea, select, [contenteditable='true'], .selectable {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+img { -webkit-user-drag: none; }
+
+/* 带时间/数字的文本：等宽数字，不靠补零/补空格对齐 */
+.tnum, [class*='entryTime'], [class*='entryDur'], [class*='barTime'], [class*='blockTime'],
+[class*='itemTime'], [class*='itemDur'], [class*='timeLabel'], [class*='navTitle'],
+[class*='dayTotal'], [class*='dayNum'], [class*='totalText'] {
+  font-variant-numeric: tabular-nums;
+}
+
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; touch-action: manipulation; }
+input, textarea, select { font: inherit; }
 a { color: inherit; text-decoration: none; }
+
+/* 按压反馈：整体变淡，不再叠加不带圆角的遮罩 */
+button, a:not([href]) { transition: opacity 90ms ease; }
+button:not(:disabled):active, a:not([href]):active { opacity: 0.62; }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--c-tint); outline-offset: 2px; }
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -86,29 +162,54 @@ a { color: inherit; text-decoration: none; }
 /* ── FAB ── */
 .fab {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  right: calc(24px + var(--safe-right));
+  bottom: calc(24px + var(--safe-bottom));
   background: var(--c-accent-1);
-  color: white;
+  color: var(--c-accent-fg);
   border-radius: 99px;
   padding: 0 20px;
-  height: 42px;
+  height: 44px;
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  box-shadow: 0 4px 16px oklch(44% 0.10 178 / 0.4);
+  box-shadow: var(--shadow-md);
   z-index: 90;
-  transition: background 150ms, transform 100ms, box-shadow 150ms;
+  transition: transform 100ms, box-shadow 150ms, opacity 90ms;
   display: flex;
   align-items: center;
   gap: 7px;
 }
-.fab:hover {
-  background: var(--c-accent-2);
-  box-shadow: 0 6px 20px oklch(44% 0.10 178 / 0.45);
-}
 .fab:active { transform: scale(0.96); }
 
 @media (max-width: 768px) {
-  .fab { bottom: 78px; right: 14px; }
+  .fab { bottom: calc(78px + var(--safe-bottom)); right: calc(14px + var(--safe-right)); }
+}
+
+/* ── 拖拽中的全局状态（时间轴长按拖动） ── */
+body.is-dragging, body.is-dragging * { cursor: grabbing !important; user-select: none !important; }
+body.is-dragging[data-drag='resize'], body.is-dragging[data-drag='resize'] * { cursor: ns-resize !important; }
+
+/* ── 轻提示 ── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(96px + var(--safe-bottom));
+  transform: translateX(-50%);
+  max-width: min(86vw, 360px);
+  padding: 10px 16px;
+  border-radius: var(--radius-lg);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--c-bg);
+  background: color-mix(in srgb, var(--c-heading) 88%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  pointer-events: none;
+  animation: toast-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
 }

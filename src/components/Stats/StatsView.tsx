@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import {
   startOfWeek, endOfWeek, startOfMonth, endOfMonth,
   format, parseISO, differenceInMinutes
@@ -10,6 +10,7 @@ import {
 import { useEntryStore } from '../../store/entryStore'
 import { useUIStore } from '../../store/uiStore'
 import { formatDuration } from '../../utils/parseInput'
+import { fmtClock } from '../../utils/time'
 import s from './StatsView.module.css'
 
 type Range = 'this-week' | 'last-week' | 'this-month' | 'last-month'
@@ -101,10 +102,17 @@ export function StatsView() {
   return (
     <div className={s.container}>
       {/* Range tabs */}
-      <div className={s.rangeTabs}>
+      <div
+        className={s.rangeTabs}
+        role="tablist"
+        style={{ '--idx': RANGES.findIndex((r) => r.key === range), '--n': RANGES.length } as CSSProperties}
+      >
+        <span className={s.rangeThumb} aria-hidden="true" />
         {RANGES.map((r) => (
           <button
             key={r.key}
+            role="tab"
+            aria-selected={range === r.key}
             className={`${s.rangeTab} ${range === r.key ? s.active : ''}`}
             onClick={() => setRange(r.key)}
           >
@@ -237,8 +245,8 @@ export function StatsView() {
                   return (
                     <div key={e.id} className={s.entryRow}>
                       <span className={s.entryTime}>
-                        {format(parseISO(e.startTime), 'HH:mm')}
-                        {e.endTime && `–${format(parseISO(e.endTime), 'HH:mm')}`}
+                        {fmtClock(e.startTime)}
+                        {e.endTime && `–${fmtClock(e.endTime)}`}
                       </span>
                       <span className={s.entryTitle}>{e.title}</span>
                       {cat && (

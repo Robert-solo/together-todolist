@@ -7,34 +7,31 @@ import { zhCN } from 'date-fns/locale'
 import { useEntryStore } from '../../store/entryStore'
 import { useUIStore } from '../../store/uiStore'
 import { segmentForDay } from '../../utils/entrySegments'
+import { fmtClock } from '../../utils/time'
+import { useTimelineDrag, type CreateRange } from '../../hooks/useTimelineDrag'
 import { EntryModal } from './EntryModal'
 import { NewEntryModal } from './NewEntryModal'
+import { DragGhost, PressRipple } from './DragGhost'
 import s from './DayView.module.css'
+import t from './Timeline.module.css'
 
 const HOUR_HEIGHT = 64
 const HOURS = Array.from({ length: 25 }, (_, i) => i)
-const MINUTE_SNAP = 15
 
 export function DayView() {
   const { entries } = useEntryStore()
   const { categories } = useEntryStore()
   const { currentDate, filterCategoryId, navigate, setCurrentDate, setEditingEntry, editingEntryId } = useUIStore()
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [newEntry, setNewEntry] = useState<{ date: string; hour: number; minute: number } | null>(null)
+  const [newEntry, setNewEntry] = useState<CreateRange | null>(null)
 
-  /** Click an empty spot to start a record there, snapped to 15-minute steps. */
-  const handleColumnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLElement).closest('[class*="block"]')) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const minutes = ((e.clientY - rect.top) / HOUR_HEIGHT) * 60
-    const snapped = Math.round(minutes / MINUTE_SNAP) * MINUTE_SNAP
-    const clamped = Math.max(0, Math.min(23 * 60 + 45, snapped))
-    setNewEntry({
-      date: currentDate,
-      hour: Math.floor(clamped / 60),
-      minute: clamped % 60,
-    })
-  }
+  /** 长按空白新建 / 长按事件拖动 / 按住边缘调整时长（见 useTimelineDrag）。 */
+  const drag = useTimelineDrag({
+    scrollRef,
+    totalHours: HOURS.length,
+    onTap: setEditingEntry,
+    onCreate: setNewEntry,
+  })
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 7 * HOUR_HEIGHT - 20
@@ -110,12 +107,12 @@ export function DayView() {
         <div className={s.timeAxis}>
           {HOURS.map((h) => (
             <div key={h} className={s.timeLabel}>
-              {h < 24 ? String(h).padStart(2, '0') : ''}
+              {h < 24 ? h : ''}
             </div>
           ))}
         </div>
 
-        <div className={s.dayColumn} onClick={handleColumnClick}>
+        <div className={s.dayColumn} {...drag.columnProps(currentDate)}>
           {HOURS.map((h) => (
             <div key={h} className={s.hourLine} style={{ top: h * HOUR_HEIGHT }} />
           ))}
@@ -135,12 +132,25 @@ export function DayView() {
             const height = Math.max(20, (seg.durationMinutes / 60) * HOUR_HEIGHT - 2)
             const dimmed = filterCategoryId && entry.categoryId !== filterCategoryId
             const isPast = isToday(day) && !!entry.endTime && parseISO(entry.endTime) < now
+            const color = cat?.color ?? 'var(--cat-other)'
+            const lifted = drag.preview?.entryId === entry.id
+            const pressing = drag.press?.kind === 'entry' && drag.press.entryId === entry.id
             return (
               <div
                 key={entry.id}
-                className={`${s.block} ${dimmed ? s.dimmed : ''} ${isPast ? s.past : ''} ${seg.isContinuation ? s.continued : ''} ${seg.continuesAfter ? s.continues : ''}`}
-                style={{ top, height, background: cat?.color ?? 'var(--cat-other)' }}
-                onClick={() => setEditingEntry(entry.id)}
+                {...drag.entryProps(entry, seg, currentDate, color)}
+                className={[
+                  s.block,
+                  dimmed ? s.dimmed : '',
+                  isPast ? s.past : '',
+                  seg.isContinuation ? s.continued : '',
+                  seg.continuesAfter ? s.continues : '',
+                  !seg.isContinuation ? t.hTop : '',
+                  !seg.continuesAfter ? t.hBottom : '',
+                  lifted ? t.lifted : '',
+                  pressing ? t.pressing : '',
+                ].join(' ')}
+                style={{ top, height, background: color }}
               >
                 <div className={s.blockTitle}>
                   {seg.isContinuation && <span className={s.crossTag}>续</span>}
@@ -149,9 +159,9 @@ export function DayView() {
                 </div>
                 {height > 36 && (
                   <div className={s.blockTime}>
-                    {seg.isContinuation ? '00:00' : format(parseISO(entry.startTime), 'HH:mm')}
+                    {seg.isContinuation ? '0:00' : fmtClock(entry.startTime)}
                     –
-                    {seg.continuesAfter ? '24:00' : format(parseISO(entry.endTime!), 'HH:mm')}
+                    {seg.continuesAfter ? '24:00' : fmtClock(entry.endTime!)}
                   </div>
                 )}
                 {height > 56 && entry.memo && (
@@ -160,6 +170,9 @@ export function DayView() {
               </div>
             )
           })}
+
+          <PressRipple press={drag.press} dateKey={currentDate} />
+          {drag.preview && <DragGhost preview={drag.preview} day={day} hourHeight={HOUR_HEIGHT} />}
         </div>
       </div>
 
@@ -167,11 +180,15 @@ export function DayView() {
       {newEntry && (
         <NewEntryModal
           date={newEntry.date}
-          startHour={newEntry.hour}
-          startMinute={newEntry.minute}
+          startHour={Math.floor(newEntry.startMinutes / 60)}
+          startMinute={newEntry.startMinutes % 60}
+          endHour={Math.floor((newEntry.endMinutes >= 1440 ? newEntry.endMinutes - 1440 : newEntry.endMinutes) / 60)}
+          endMinute={(newEntry.endMinutes >= 1440 ? newEntry.endMinutes - 1440 : newEntry.endMinutes) % 60}
+          endsNextDay={newEntry.endMinutes >= 1440}
           onClose={() => setNewEntry(null)}
         />
       )}
+      {drag.notice && <div className="toast">{drag.notice}</div>}
     </div>
   )
 }

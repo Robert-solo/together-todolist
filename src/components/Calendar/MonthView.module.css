@@ -1,7 +1,10 @@
 .container {
   flex: 1;
+  min-height: 0;                 /* 允许在 flex 父级里滚动 */
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 20px;
+  padding-bottom: calc(96px + var(--safe-bottom));   /* 给灵感箱按钮留出空间 */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -9,6 +12,7 @@
 
 /* Nav row */
 .navRow {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -24,7 +28,10 @@
   color: var(--c-muted);
   transition: background 100ms, color 100ms;
 }
-.navBtn:hover { background: var(--c-bg); color: var(--c-body); }
+@media (hover: hover) {
+  .navBtn:hover { background: var(--c-bg); color: var(--c-body);
+  }
+}
 
 .navTitle {
   flex: 1;
@@ -35,7 +42,7 @@
 
 .todayBtn {
   font-size: 0.75rem;
-  color: var(--c-accent-1);
+  color: var(--c-tint);
   padding: 3px 10px;
   border-radius: 99px;
   background: var(--c-accent-bg);
@@ -45,6 +52,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  flex-shrink: 0;                /* overflow:hidden 的网格不能被压扁，否则下半部分被裁掉而不是滚动 */
   gap: 1px;
   background: var(--c-border);
   border-radius: var(--radius-md);
@@ -74,13 +82,16 @@
   overflow: hidden;
 }
 
-.cell:hover { background: var(--c-bg); }
+@media (hover: hover) {
+  .cell:hover { background: var(--c-bg);
+  }
+}
 
 .cell.otherMonth { opacity: 0.4; }
 
 .cell.today .dayNum {
   background: var(--c-accent-1);
-  color: white;
+  color: var(--c-on-color);
 }
 
 .dayNum {
@@ -177,6 +188,7 @@
 @media (max-width: 768px) {
   .container { padding: 12px; }
   .cell { min-height: 74px; padding: 4px; }
-  .bar { height: 13px; }
+  .bar { height: 13px; gap: 3px; }
+  .barTrack { width: 12px; }
   .barLabel { font-size: 0.54rem; }
 }

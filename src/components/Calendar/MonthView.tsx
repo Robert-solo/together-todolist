@@ -8,6 +8,7 @@ import { zhCN } from 'date-fns/locale'
 import { useEntryStore } from '../../store/entryStore'
 import { useUIStore } from '../../store/uiStore'
 import { formatDuration } from '../../utils/parseInput'
+import { fmtClock } from '../../utils/time'
 import { DayDetailModal } from './DayDetailModal'
 import s from './MonthView.module.css'
 
@@ -95,10 +96,10 @@ export function MonthView() {
                     <div
                       key={e.id}
                       className={`${s.bar} ${isPast ? s.barPast : ''}`}
-                      title={`${e.startTime.slice(11, 16)}${e.endTime ? '–' + e.endTime.slice(11, 16) : ''} ${e.title}`}
+                      title={`${fmtClock(e.startTime)}${e.endTime ? '–' + fmtClock(e.endTime) : ''} ${e.title}`}
                     >
                       <span className={s.barText}>
-                        <span className={s.barTime}>{e.startTime.slice(11, 16)}</span>
+                        <span className={s.barTime}>{fmtClock(e.startTime)}</span>
                         {e.title}
                       </span>
                       <span className={s.barTrack}>

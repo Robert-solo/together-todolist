@@ -8,7 +8,13 @@
     "androidScheme": "https"
   },
   "android": {
-    "backgroundColor": "#06090a",
     "allowMixedContent": false
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "style": "DEFAULT",
+      "initialViewportFitValueHint": "cover"
+    }
   }
 }

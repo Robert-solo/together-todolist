@@ -4,8 +4,8 @@
   "description": "一起把时间用在值得的地方",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#06090a",
-  "theme_color": "#0f8a7a",
+  "background_color": "#F2F2F7",
+  "theme_color": "#FFFFFF",
   "orientation": "portrait",
   "lang": "zh-CN",
   "icons": [

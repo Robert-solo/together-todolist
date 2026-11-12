@@ -13,29 +13,34 @@ export interface DaySegment {
 }
 
 /**
- * Clip an entry against one calendar day.
- * Returns null when the entry does not touch the day at all.
+ * Clip an absolute time range (ms) against one calendar day.
+ * Returns null when the range does not touch the day at all.
  */
-export function segmentForDay(entry: TimeEntry, day: Date): DaySegment | null {
-  if (!entry.endTime) return null
-
-  const start = parseISO(entry.startTime).getTime()
-  const end = parseISO(entry.endTime).getTime()
-  if (!(end > start)) return null
+export function segmentForRange(startMs: number, endMs: number, day: Date): DaySegment | null {
+  if (!(endMs > startMs)) return null
 
   const dayStart = startOfDay(day).getTime()
   const dayEnd = addDays(startOfDay(day), 1).getTime()
 
-  const from = Math.max(start, dayStart)
-  const to = Math.min(end, dayEnd)
+  const from = Math.max(startMs, dayStart)
+  const to = Math.min(endMs, dayEnd)
   if (to <= from) return null
 
   return {
     offsetMinutes: (from - dayStart) / 60000,
     durationMinutes: (to - from) / 60000,
-    isContinuation: start < dayStart,
-    continuesAfter: end > dayEnd,
+    isContinuation: startMs < dayStart,
+    continuesAfter: endMs > dayEnd,
   }
+}
+
+/**
+ * Clip an entry against one calendar day.
+ * Returns null when the entry does not touch the day at all.
+ */
+export function segmentForDay(entry: TimeEntry, day: Date): DaySegment | null {
+  if (!entry.endTime) return null
+  return segmentForRange(parseISO(entry.startTime).getTime(), parseISO(entry.endTime).getTime(), day)
 }
 
 /** True when any part of the entry falls on the given day. */

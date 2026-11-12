@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- systemGroupedBackground（亮）— 网页加载前的窗口底色 -->
+    <color name="appBackground">#F2F2F7</color>
+</resources>

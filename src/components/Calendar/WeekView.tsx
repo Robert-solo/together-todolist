@@ -9,12 +9,39 @@ import { useEntryStore } from '../../store/entryStore'
 import { useUIStore } from '../../store/uiStore'
 import { formatDuration } from '../../utils/parseInput'
 import { segmentForDay } from '../../utils/entrySegments'
+import { fmtClock } from '../../utils/time'
+import { useTimelineDrag, type CreateRange } from '../../hooks/useTimelineDrag'
 import { EntryModal } from './EntryModal'
 import { NewEntryModal } from './NewEntryModal'
+import { DragGhost, PressRipple } from './DragGhost'
 import s from './WeekView.module.css'
+import t from './Timeline.module.css'
 
 const HOUR_HEIGHT = 60
 const HOURS = Array.from({ length: 25 }, (_, i) => i)
+const STATS_KEY = 'zhiri.weekStatsOpen'
+
+interface NewEntryState {
+  date: string
+  startHour: number
+  startMinute: number
+  endHour: number
+  endMinute: number
+  endsNextDay: boolean
+}
+
+const toNewEntry = (r: CreateRange): NewEntryState => {
+  const endsNextDay = r.endMinutes >= 1440
+  const end = endsNextDay ? r.endMinutes - 1440 : r.endMinutes
+  return {
+    date: r.date,
+    startHour: Math.floor(r.startMinutes / 60),
+    startMinute: r.startMinutes % 60,
+    endHour: Math.floor(end / 60),
+    endMinute: end % 60,
+    endsNextDay,
+  }
+}
 
 
 export function WeekView() {
@@ -27,7 +54,23 @@ export function WeekView() {
   } = useUIStore()
 
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [newEntry, setNewEntry] = useState<{ date: string; hour: number } | null>(null)
+  const [newEntry, setNewEntry] = useState<NewEntryState | null>(null)
+  const [statsOpen, setStatsOpen] = useState(() => {
+    try { return localStorage.getItem(STATS_KEY) !== '0' } catch { return true }
+  })
+  const toggleStats = () => {
+    setStatsOpen((open) => {
+      try { localStorage.setItem(STATS_KEY, open ? '0' : '1') } catch { /* 无痕模式 */ }
+      return !open
+    })
+  }
+
+  const drag = useTimelineDrag({
+    scrollRef,
+    totalHours: HOURS.length,
+    onTap: setEditingEntry,
+    onCreate: (r) => setNewEntry(toNewEntry(r)),
+  })
 
   // Always anchor to Monday of the week containing currentDate
   const weekStart = useMemo(
@@ -86,15 +129,6 @@ export function WeekView() {
       return acc + (seg ? seg.durationMinutes : 0)
     }, 0)
 
-  const handleBodyClick = (e: React.MouseEvent<HTMLDivElement>, day: Date) => {
-    // Only fire on direct click on the body, not on a block
-    if ((e.target as HTMLElement).closest('[data-block]')) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const y = e.clientY - rect.top
-    const hour = Math.floor(y / HOUR_HEIGHT)
-    setNewEntry({ date: format(day, 'yyyy-MM-dd'), hour: Math.max(0, Math.min(23, hour)) })
-  }
-
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 30_000)
@@ -107,7 +141,9 @@ export function WeekView() {
 
   return (
     <div className={s.container}>
-      {/* Stats bar */}
+      {/* Stats bar（可折叠） */}
+      <div className={`${s.statsWrap} ${statsOpen ? '' : s.statsCollapsed}`} aria-hidden={!statsOpen}>
+       <div className={s.statsInner}>
       <div className={s.stats}>
         <div className={s.statCard}>
           <div className={s.statLabel}>本周记录</div>
@@ -138,6 +174,8 @@ export function WeekView() {
           </div>
         </div>
       </div>
+       </div>
+      </div>
 
       {/* Nav row */}
       <div className={s.navRow}>
@@ -152,10 +190,25 @@ export function WeekView() {
           </svg>
         </button>
         <span className={s.navTitle}>
-          {format(weekStart, 'yyyy年 M月 d日', { locale: zhCN })}
+          <span className={s.yearPart}>{format(weekStart, 'yyyy年 ', { locale: zhCN })}</span>
+          {format(weekStart, 'M月 d日', { locale: zhCN })}
           {' — '}
           {format(weekEnd, 'M月 d日', { locale: zhCN })}
         </span>
+        <button
+          className={s.statsToggle}
+          onClick={toggleStats}
+          aria-expanded={statsOpen}
+          aria-label={statsOpen ? '收起本周统计' : '展开本周统计'}
+        >
+          {!statsOpen && (
+            <span className={s.statsSummary}>{weekEntries.length} 条 · {formatDuration(totalMins)}</span>
+          )}
+          <svg className={`${s.chev} ${statsOpen ? s.chevOpen : ''}`} width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 5l4 4 4-4" />
+          </svg>
+          统计
+        </button>
         <button className={s.todayBtn} onClick={goToday}>今天</button>
       </div>
 
@@ -167,7 +220,7 @@ export function WeekView() {
             <div className={s.timeAxisPad} />
             {HOURS.map((h) => (
               <div key={h} className={s.timeLabel}>
-                {h < 24 ? String(h).padStart(2, '0') : ''}
+                {h < 24 ? h : ''}
               </div>
             ))}
           </div>
@@ -176,6 +229,7 @@ export function WeekView() {
           {days.map((day, di) => {
             const dayEntries = entriesForDay(day)
             const isToday_ = isToday(day)
+            const dateKey = format(day, 'yyyy-MM-dd')
 
             return (
               <div key={di} className={s.dayCol}>
@@ -196,7 +250,7 @@ export function WeekView() {
                 <div
                   className={s.dayBody}
                   style={{ height: HOURS.length * HOUR_HEIGHT }}
-                  onClick={(e) => handleBodyClick(e, day)}
+                  {...drag.columnProps(dateKey)}
                 >
                   {/* Grid lines */}
                   {HOURS.map((h) => (
@@ -223,20 +277,26 @@ export function WeekView() {
                     const dimmed = filterCategoryId && entry.categoryId !== filterCategoryId
                     const isPast = isToday_ && !!entry.endTime && parseISO(entry.endTime) < now
 
+                    const color = cat?.color ?? 'var(--cat-other)'
+                    const lifted = drag.preview?.entryId === entry.id
+                    const pressing = drag.press?.kind === 'entry' && drag.press.entryId === entry.id
+
                     return (
                       <div
                         key={entry.id}
-                        data-block="1"
-                        className={`${s.block} ${dimmed ? s.dimmed : ''} ${isPast ? s.past : ''} ${seg.isContinuation ? s.continued : ''} ${seg.continuesAfter ? s.continues : ''}`}
-                        style={{
-                          top,
-                          height,
-                          background: cat?.color ?? 'var(--cat-other)',
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setEditingEntry(entry.id)
-                        }}
+                        {...drag.entryProps(entry, seg, dateKey, color)}
+                        className={[
+                          s.block,
+                          dimmed ? s.dimmed : '',
+                          isPast ? s.past : '',
+                          seg.isContinuation ? s.continued : '',
+                          seg.continuesAfter ? s.continues : '',
+                          !seg.isContinuation ? t.hTop : '',
+                          !seg.continuesAfter ? t.hBottom : '',
+                          lifted ? t.lifted : '',
+                          pressing ? t.pressing : '',
+                        ].join(' ')}
+                        style={{ top, height, background: color }}
                       >
                         <div className={s.blockTitle}>
                           {seg.isContinuation && <span className={s.crossTag}>续</span>}
@@ -245,14 +305,17 @@ export function WeekView() {
                         </div>
                         {height > 34 && (
                           <div className={s.blockTime}>
-                            {seg.isContinuation ? '00:00' : format(parseISO(entry.startTime), 'HH:mm')}
+                            {seg.isContinuation ? '0:00' : fmtClock(entry.startTime)}
                             –
-                            {seg.continuesAfter ? '24:00' : format(parseISO(entry.endTime!), 'HH:mm')}
+                            {seg.continuesAfter ? '24:00' : fmtClock(entry.endTime!)}
                           </div>
                         )}
                       </div>
                     )
                   })}
+
+                  <PressRipple press={drag.press} dateKey={dateKey} />
+                  {drag.preview && <DragGhost preview={drag.preview} day={day} hourHeight={HOUR_HEIGHT} />}
                 </div>
               </div>
             )
@@ -264,10 +327,15 @@ export function WeekView() {
       {newEntry && (
         <NewEntryModal
           date={newEntry.date}
-          startHour={newEntry.hour}
+          startHour={newEntry.startHour}
+          startMinute={newEntry.startMinute}
+          endHour={newEntry.endHour}
+          endMinute={newEntry.endMinute}
+          endsNextDay={newEntry.endsNextDay}
           onClose={() => setNewEntry(null)}
         />
       )}
+      {drag.notice && <div className="toast">{drag.notice}</div>}
     </div>
   )
 }

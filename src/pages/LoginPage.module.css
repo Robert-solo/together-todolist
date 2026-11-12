@@ -1,5 +1,5 @@
 .container {
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,7 +16,7 @@
   background: var(--c-raised);
   border: 1px solid var(--c-border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.08);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 0.08);
   width: 100%;
   max-width: 420px;
   padding: 40px;
@@ -36,7 +36,7 @@
   border-radius: 16px;
   margin-bottom: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 14px oklch(44% 0.10 178 / 0.35);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--c-accent-1) 35%, transparent);
 }
 
 .title {
@@ -75,14 +75,16 @@
   cursor: pointer;
 }
 
-.tab:hover:not(:disabled) {
+@media (hover: hover) {
+  .tab:hover:not(:disabled) {
   color: var(--c-body);
+  }
 }
 
 .tab.active {
   background: var(--c-raised);
   color: var(--c-heading);
-  box-shadow: 0 1px 3px oklch(0% 0 0 / 0.08);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
 }
 
 .tab:disabled {
@@ -97,18 +99,18 @@
 }
 
 .error {
-  background: oklch(96% 0.05 25 / 0.5);
-  border-left: 3px solid oklch(56% 0.20 25);
+  background: var(--c-danger-bg);
+  border-left: 3px solid var(--c-danger);
   padding: 12px 16px;
   font-size: 0.8rem;
-  color: oklch(52% 0.20 25);
+  color: var(--c-danger);
   border-radius: var(--radius-sm);
   line-height: 1.6;
 }
 
 .notice {
-  background: oklch(96% 0.04 60 / 0.5);
-  border-left: 3px solid oklch(65% 0.12 60);
+  background: var(--c-fill);
+  border-left: 3px solid var(--c-muted);
   padding: 12px 16px;
   font-size: 0.8rem;
   color: var(--c-body);
@@ -140,8 +142,8 @@
 
 .input:focus {
   outline: none;
-  border-color: var(--c-accent-1);
-  box-shadow: 0 0 0 3px oklch(from var(--c-accent-1) l c h / 0.1);
+  border-color: var(--c-tint);
+  box-shadow: 0 0 0 3px var(--c-accent-bg);
 }
 
 .input::placeholder {
@@ -150,14 +152,14 @@
 
 .hint {
   font-size: 0.75rem;
-  color: oklch(56% 0.18 25);
+  color: var(--c-danger);
 }
 
 .submitBtn {
   padding: 12px 20px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: white;
+  color: var(--c-on-color);
   background: var(--c-accent-1);
   border: none;
   border-radius: var(--radius-md);
@@ -166,9 +168,11 @@
   margin-top: 8px;
 }
 
-.submitBtn:hover:not(:disabled) {
-  background: oklch(from var(--c-accent-1) calc(l - 0.05) c h);
+@media (hover: hover) {
+  .submitBtn:hover:not(:disabled) {
+  background: var(--c-accent-2);
   transform: translateY(-1px);
+  }
 }
 
 .submitBtn:active:not(:disabled) {

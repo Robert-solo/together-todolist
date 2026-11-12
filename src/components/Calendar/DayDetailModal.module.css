@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: oklch(0% 0 0 / 0.4);
+  background: var(--c-scrim);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -14,10 +14,10 @@
   background: var(--c-raised);
   border: 1px solid var(--c-border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.24);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 0.24);
   width: 100%;
   max-width: 560px;
-  max-height: 80vh;
+  max-height: calc(80vh / var(--ui-zoom));
   display: flex;
   flex-direction: column;
   animation: slideIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -56,9 +56,11 @@
   transition: background 100ms, color 100ms;
 }
 
-.close:hover {
+@media (hover: hover) {
+  .close:hover {
   background: var(--c-bg);
   color: var(--c-body);
+  }
 }
 
 .body {
@@ -100,10 +102,12 @@
   transition: background 100ms, border-color 100ms, box-shadow 100ms;
 }
 
-.item:hover {
+@media (hover: hover) {
+  .item:hover {
   background: var(--c-raised);
-  border-color: var(--c-accent-1);
+  border-color: var(--c-tint);
   box-shadow: var(--shadow-sm);
+  }
 }
 
 .itemTime {
@@ -160,22 +164,24 @@
 
 .viewDayBtn {
   font-size: 0.8rem;
-  color: var(--c-accent-1);
+  color: var(--c-tint);
   padding: 7px 18px;
   border-radius: var(--radius-md);
   border: 1px solid var(--c-accent-1);
   transition: background 100ms, color 100ms;
 }
 
-.viewDayBtn:hover {
+@media (hover: hover) {
+  .viewDayBtn:hover {
   background: var(--c-accent-1);
-  color: white;
+  color: var(--c-on-color);
+  }
 }
 
 @media (max-width: 768px) {
   .modal {
     max-width: 100%;
-    max-height: 90vh;
+    max-height: calc(90vh / var(--ui-zoom));
   }
 
   .itemTime {

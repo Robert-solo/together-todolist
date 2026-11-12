@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- systemBackground（暗） -->
+    <color name="appBackground">#000000</color>
+</resources>

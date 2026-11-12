@@ -9,10 +9,14 @@ interface Props {
   date: string        // YYYY-MM-DD
   startHour: number   // 0-23
   startMinute?: number
+  /** 长按新建时由时间轴给出（已避开后面的日程）；不给则默认开始后一小时 */
+  endHour?: number
+  endMinute?: number
+  endsNextDay?: boolean
   onClose: () => void
 }
 
-export function NewEntryModal({ date, startHour, startMinute = 0, onClose }: Props) {
+export function NewEntryModal({ date, startHour, startMinute = 0, endHour, endMinute = 0, endsNextDay = false, onClose }: Props) {
   const { addEntry, categories } = useEntryStore()
   const [warn, setWarn] = useState('')
 
@@ -21,8 +25,12 @@ export function NewEntryModal({ date, startHour, startMinute = 0, onClose }: Pro
   const [memo, setMemo] = useState('')
   const [categoryId, setCategoryId] = useState('other')
   const [startTime, setStartTime] = useState(`${pad(startHour)}:${pad(startMinute)}`)
-  const [endTime, setEndTime] = useState(`${pad(Math.min(startHour + 1, 23))}:${pad(startMinute)}`)
-  const [crossDay, setCrossDay] = useState(false)
+  const [endTime, setEndTime] = useState(
+    endHour !== undefined
+      ? `${pad(endHour)}:${pad(endMinute)}`
+      : `${pad(Math.min(startHour + 1, 23))}:${pad(startMinute)}`
+  )
+  const [crossDay, setCrossDay] = useState(endsNextDay)
 
   const endDate = crossDay ? format(addDays(parseISO(date), 1), 'yyyy-MM-dd') : date
 
