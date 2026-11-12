@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <!-- Base application theme.
+         必须继承 DayNight 才能让 appBackground 随深色模式切换；
+         同时关掉 ActionBar，以免 WebView 上面多一条原生标题栏。 -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:background">@null</item>
+        <!-- 窗口背景与网页一致：加载完成前不会出现黑色横条 -->
         <item name="android:windowBackground">@color/appBackground</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- EdgeToEdge 会接管系统栏颜色，这里只需允许绘制 -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <!-- MainActivity 实际使用 NoActionBar 子主题（Manifest 中引用），
+         继承上面的设定，不再重复覆盖颜色。 -->
+    <style name="AppTheme.NoActionBar">
+        <!-- 保持与父主题一致，无需额外覆盖 -->
     </style>
 
 
