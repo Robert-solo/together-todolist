@@ -8,6 +8,8 @@ Together Todolist 是一款轻量的时间日志 Web 应用，帮助你记录每
 
 ## 界面预览
 
+### 桌面端
+
 | 日视图 | 周视图 |
 |:---:|:---:|
 | ![日视图](layout/web01.png) | ![周视图](layout/web02.png) |
@@ -15,6 +17,16 @@ Together Todolist 是一款轻量的时间日志 Web 应用，帮助你记录每
 | 月视图 | 统计 |
 |:---:|:---:|
 | ![月视图](layout/web03.png) | ![统计](layout/web04.png) |
+
+### 手机端
+
+<p align="center">
+  <img src="layout/Layout01.jpg" width="19%" alt="手机日视图" />
+  <img src="layout/Layout02.jpg" width="19%" alt="手机周视图" />
+  <img src="layout/Layout03.jpg" width="19%" alt="手机月视图" />
+  <img src="layout/Layout04.jpg" width="19%" alt="手机统计" />
+  <img src="layout/Layout05.jpg" width="19%" alt="APP 预览" />
+</p>
 
 ---
 
