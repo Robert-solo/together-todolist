@@ -1,0 +1,114 @@
+/* ── Color tokens ── */
+:root {
+  /* Neutral ramp — warm off-white base */
+  --c-bg:        oklch(96.5% 0.005 240);
+  --c-surface:   oklch(98.5% 0.003 240);
+  --c-raised:    oklch(100%  0     0);
+  --c-border:    oklch(89%   0.008 240);
+  --c-border-soft: oklch(93% 0.005 240);
+  --c-muted:     oklch(62%   0.012 240);
+  --c-body:      oklch(28%   0.012 240);
+  --c-heading:   oklch(14%   0.010 240);
+
+  /* Accent — refined teal */
+  --c-accent-1:  oklch(44%  0.100 178);
+  --c-accent-2:  oklch(52%  0.100 178);
+  --c-accent-3:  oklch(60%  0.095 178);
+  --c-accent-bg: oklch(93%  0.028 178);
+  --c-accent-fg: oklch(99%  0.004 178);
+
+  /* Category palette — vivid, perceptually balanced */
+  --cat-research: oklch(52% 0.22 255);
+  --cat-study:    oklch(50% 0.24 285);
+  --cat-work:     oklch(54% 0.22 310);
+  --cat-sport:    oklch(56% 0.20 150);
+  --cat-life:     oklch(60% 0.18 68);
+  --cat-social:   oklch(56% 0.22 25);
+  --cat-leisure:  oklch(54% 0.23 335);
+  --cat-other:    oklch(55% 0.18 195);
+
+  /* Layout */
+  --sidebar-w:   168px;
+  --topbar-h:    56px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   22px;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px oklch(14% 0.01 240 / 0.06);
+  --shadow-sm: 0 1px 4px oklch(14% 0.01 240 / 0.08), 0 1px 2px oklch(14% 0.01 240 / 0.04);
+  --shadow-md: 0 4px 16px oklch(14% 0.01 240 / 0.10), 0 1px 4px oklch(14% 0.01 240 / 0.06);
+  --shadow-lg: 0 12px 32px oklch(14% 0.01 240 / 0.14), 0 2px 8px oklch(14% 0.01 240 / 0.08);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg:         oklch(13%  0.008 240);
+    --c-surface:    oklch(17%  0.008 240);
+    --c-raised:     oklch(21%  0.008 240);
+    --c-border:     oklch(28%  0.010 240);
+    --c-border-soft:oklch(24%  0.008 240);
+    --c-muted:      oklch(55%  0.010 240);
+    --c-body:       oklch(84%  0.008 240);
+    --c-heading:    oklch(96%  0.004 240);
+    --c-accent-1:   oklch(58%  0.095 178);
+    --c-accent-2:   oklch(64%  0.090 178);
+    --c-accent-3:   oklch(70%  0.085 178);
+    --c-accent-bg:  oklch(22%  0.040 178);
+    --c-accent-fg:  oklch(99%  0.004 178);
+    --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.25);
+    --shadow-sm: 0 1px 4px oklch(0% 0 0 / 0.30);
+    --shadow-md: 0 4px 16px oklch(0% 0 0 / 0.35);
+    --shadow-lg: 0 12px 32px oklch(0% 0 0 / 0.45);
+  }
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, system-ui, sans-serif;
+  background: var(--c-bg);
+  color: var(--c-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+input, textarea { font: inherit; }
+a { color: inherit; text-decoration: none; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 99px; }
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: var(--c-accent-1);
+  color: white;
+  border-radius: 99px;
+  padding: 0 20px;
+  height: 42px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px oklch(44% 0.10 178 / 0.4);
+  z-index: 90;
+  transition: background 150ms, transform 100ms, box-shadow 150ms;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.fab:hover {
+  background: var(--c-accent-2);
+  box-shadow: 0 6px 20px oklch(44% 0.10 178 / 0.45);
+}
+.fab:active { transform: scale(0.96); }
+
+@media (max-width: 768px) {
+  .fab { bottom: 78px; right: 14px; }
+}

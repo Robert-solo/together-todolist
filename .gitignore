@@ -1,0 +1,24 @@
+node_modules
+dist
+data
+*.log
+.DS_Store
+
+# secrets / runtime data (database holds password hashes and sessions)
+.env
+.env.*
+data/
+logs/
+
+# build outputs & local tooling
+release/
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+*.keystore
+*.jks
+
+# personal screenshots in the project root
+微信图片_*.png

@@ -1,0 +1,14 @@
+{
+  "appId": "asia.whunlp.together",
+  "appName": "Together Todolist",
+  "webDir": "dist",
+  "server": {
+    "url": "https://todo.whunlp.asia",
+    "cleartext": false,
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#06090a",
+    "allowMixedContent": false
+  }
+}

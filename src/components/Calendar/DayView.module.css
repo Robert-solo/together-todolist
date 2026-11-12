@@ -1,0 +1,231 @@
+.container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--c-border);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+}
+
+.statCard {
+  background: var(--c-surface);
+  padding: 14px 20px;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  color: var(--c-muted);
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--c-heading);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.statUnit {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--c-muted);
+  margin-left: 2px;
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+
+.navBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--c-muted);
+  transition: background 100ms, color 100ms;
+}
+
+.navBtn:hover {
+  background: var(--c-bg);
+  color: var(--c-body);
+}
+
+.navTitle {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--c-heading);
+}
+
+.todayBtn {
+  font-size: 0.75rem;
+  color: var(--c-accent-1);
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--c-accent-bg);
+}
+
+.timeline {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+}
+
+.timeAxis {
+  width: 48px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--c-border);
+  background: var(--c-surface);
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.timeLabel {
+  height: 64px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 2px 8px 0 0;
+  font-size: 0.65rem;
+  color: var(--c-muted);
+  user-select: none;
+}
+
+.dayColumn {
+  flex: 1;
+  position: relative;
+  height: 1600px;
+}
+
+.hourLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--c-border);
+  pointer-events: none;
+}
+
+.halfLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--c-border);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.nowLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--c-accent-1);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.nowDot {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c-accent-1);
+}
+
+.block {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  border-radius: 7px;
+  padding: 5px 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: filter 100ms, transform 100ms;
+  box-shadow: 0 1px 4px oklch(0% 0 0 / 0.14);
+}
+
+.block:hover {
+  filter: brightness(1.08);
+  transform: scaleX(1.01);
+  z-index: 5;
+}
+
+.blockTitle {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: white;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 1px 1px oklch(0% 0 0 / 0.2);
+}
+
+.blockTime {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: oklch(100% 0 0 / 0.88);
+  margin-top: 2px;
+  text-shadow: 0 1px 1px oklch(0% 0 0 / 0.15);
+}
+
+.blockMemo {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: oklch(100% 0 0 / 0.75);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 1px 1px oklch(0% 0 0 / 0.12);
+}
+
+.dimmed { opacity: 0.25; }
+
+.past {
+  opacity: 0.5;
+  filter: saturate(0.3) brightness(0.9);
+}
+
+/* Cross-day continuations get a dashed edge on the joined side. */
+.continued {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 2px dashed oklch(100% 0 0 / 0.55);
+}
+
+.continues {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 2px dashed oklch(100% 0 0 / 0.55);
+}
+
+.crossTag {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 0 4px;
+  margin-right: 4px;
+  border-radius: 3px;
+  background: oklch(100% 0 0 / 0.22);
+  vertical-align: 1px;
+}
